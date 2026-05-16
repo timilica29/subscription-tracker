@@ -18,6 +18,5 @@ namespace SubscriptionTracker.ConsoleApp.Domain
         public SubscriptionStatus SubscriptionStatus { get; set; }
         public DateTime DueDate { get; set; }
         public Price Price { get; set; }
-        public User User { get; set; }
     }
 }
