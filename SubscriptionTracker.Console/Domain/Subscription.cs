@@ -18,5 +18,10 @@ namespace SubscriptionTracker.ConsoleApp.Domain
         public SubscriptionStatus SubscriptionStatus { get; set; }
         public DateTime DueDate { get; set; }
         public Price Price { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id}, {SubscriptionType.Id} - {SubscriptionType.Name}, {SubscriptionStatus}, {DueDate}, {Price.SubscriptionPrice} - {Price.Currency}";
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SubscriptionTracker.ConsoleApp.Domain
+﻿using SubscriptionTracker.ConsoleApp.Domain.Enums;
+
+namespace SubscriptionTracker.ConsoleApp.Domain
 {
     public class User
     {
@@ -21,6 +23,19 @@
         public bool CheckDuplicateSubscriptions(int subscriptionTypeId) 
         {
             return Subscriptions.Any(s => s.SubscriptionType.Id == subscriptionTypeId);
+        }
+
+        public void AddSubscription(Subscription subscription) 
+        {
+            var checkDuplicate = CheckDuplicateSubscriptions(subscription.SubscriptionType.Id);
+            if (!checkDuplicate)
+            {
+                Subscriptions.Add(subscription);
+            }
+            else
+            {
+                Console.WriteLine("The subscription you are trying to add already exists!");
+            }
         }
     }
 }
