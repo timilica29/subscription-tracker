@@ -1,10 +1,12 @@
-﻿namespace SubscriptionTracker.ConsoleApp
+﻿using SubscriptionTracker.ConsoleApp.Domain;
+
+namespace SubscriptionTracker.ConsoleApp
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            SubscriptionMenu.InitializeApp();
         }
     }
 }
