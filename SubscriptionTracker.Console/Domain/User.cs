@@ -25,6 +25,21 @@ namespace SubscriptionTracker.ConsoleApp.Domain
             return Subscriptions.Any(s => s.SubscriptionType.Id == subscriptionTypeId);
         }
 
+        public void ViewSubscriptions()
+        {
+            if (Subscriptions.Any())
+            {
+                foreach (var subscriptions in Subscriptions)
+                {
+                    Console.WriteLine(subscriptions);
+                }
+            }
+            else 
+            {
+                Console.WriteLine("You don't have any subscriptions yet! Try adding a subscription first!");
+            }
+        }
+
         public void AddSubscription(Subscription subscription) 
         {
             var checkDuplicate = CheckDuplicateSubscriptions(subscription.SubscriptionType.Id);
@@ -36,6 +51,33 @@ namespace SubscriptionTracker.ConsoleApp.Domain
             {
                 Console.WriteLine("The subscription you are trying to add already exists!");
             }
+        }
+
+        public void DeleteSubscription(int subscriptionId) 
+        {
+            var subscription = Subscriptions.FirstOrDefault(s => s.Id == subscriptionId);
+            if (subscription != null)
+            {
+                Subscriptions.Remove(subscription);
+            }
+            else
+            {
+                Console.WriteLine("The subscription you are trying to delete does not exist!");
+            }
+        }
+
+
+        public bool MarkAsPaid(int subscriptionId) 
+        {
+            var subscription = Subscriptions.FirstOrDefault(s => s.Id == subscriptionId);
+
+            if (subscription != null && subscription.SubscriptionStatus == SubscriptionStatus.Unpaid)
+            {
+                subscription.SubscriptionStatus = SubscriptionStatus.Paid;
+                return true;
+            }
+
+            return false;
         }
     }
 }
