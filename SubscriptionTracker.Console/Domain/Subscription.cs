@@ -21,7 +21,7 @@ namespace SubscriptionTracker.ConsoleApp.Domain
 
         public override string ToString()
         {
-            return $"{Id}, {SubscriptionType.Id} - {SubscriptionType.Name}, {SubscriptionStatus}, {DueDate}, {Price.SubscriptionPrice} - {Price.Currency}";
+            return $"{Id}, Name: {SubscriptionType.Name}, Status: {SubscriptionStatus}, Due Date: {DueDate}, Price: {Price.SubscriptionPrice} {Price.Currency}";
         }
     }
 }

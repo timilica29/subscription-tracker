@@ -31,6 +31,7 @@ namespace SubscriptionTracker.ConsoleApp.Domain
             {
                 foreach (var subscriptions in Subscriptions)
                 {
+                    Console.WriteLine("\nThe current subscriptions you have are: ");
                     Console.WriteLine(subscriptions);
                 }
             }
@@ -45,11 +46,15 @@ namespace SubscriptionTracker.ConsoleApp.Domain
             var checkDuplicate = CheckDuplicateSubscriptions(subscription.SubscriptionType.Id);
             if (!checkDuplicate)
             {
+                
                 Subscriptions.Add(subscription);
+                Console.WriteLine($"The subscription for {subscription.SubscriptionType.Name} was added successfully!");
+                Console.ReadKey();
             }
             else
             {
-                Console.WriteLine("The subscription you are trying to add already exists!");
+                Console.WriteLine("The subscription you are trying to add already exists! Please add another one! ");
+                Console.ReadKey();
             }
         }
 

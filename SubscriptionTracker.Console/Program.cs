@@ -7,6 +7,7 @@ namespace SubscriptionTracker.ConsoleApp
         static void Main(string[] args)
         {
             SubscriptionMenu.InitializeApp();
+            Console.ReadLine();
         }
     }
 }
