@@ -20,69 +20,53 @@ namespace SubscriptionTracker.ConsoleApp.Domain
             return Subscriptions.Sum(s => s.Price.SubscriptionPrice);
         }
 
-        public bool CheckDuplicateSubscriptions(int subscriptionTypeId) 
+        public bool CheckDuplicateSubscriptions(string subscriptionTypeName) 
         {
-            return Subscriptions.Any(s => s.SubscriptionType.Id == subscriptionTypeId);
+            return Subscriptions.Any(s => s.SubscriptionType.Name == subscriptionTypeName);
         }
 
-        public void ViewSubscriptions()
+        public List<Subscription> ViewSubscriptions()
         {
-            if (Subscriptions.Any())
-            {
-                foreach (var subscriptions in Subscriptions)
-                {
-                    Console.WriteLine("\nThe current subscriptions you have are: ");
-                    Console.WriteLine(subscriptions);
-                }
-            }
-            else 
-            {
-                Console.WriteLine("You don't have any subscriptions yet! Try adding a subscription first!");
-            }
+            return Subscriptions;
         }
 
-        public void AddSubscription(Subscription subscription) 
+        public bool AddSubscription(Subscription subscription) 
         {
-            var checkDuplicate = CheckDuplicateSubscriptions(subscription.SubscriptionType.Id);
+            bool result = false;
+            var checkDuplicate = CheckDuplicateSubscriptions(subscription.SubscriptionType.Name);
             if (!checkDuplicate)
             {
-                
                 Subscriptions.Add(subscription);
-                Console.WriteLine($"The subscription for {subscription.SubscriptionType.Name} was added successfully!");
-                Console.ReadKey();
+                result = true;
             }
-            else
-            {
-                Console.WriteLine("The subscription you are trying to add already exists! Please add another one! ");
-                Console.ReadKey();
-            }
+            return result;
         }
 
-        public void DeleteSubscription(int subscriptionId) 
+        public bool DeleteSubscription(int subscriptionId) 
         {
+            bool result = false;
             var subscription = Subscriptions.FirstOrDefault(s => s.Id == subscriptionId);
             if (subscription != null)
             {
                 Subscriptions.Remove(subscription);
+                result = true;
             }
-            else
-            {
-                Console.WriteLine("The subscription you are trying to delete does not exist!");
-            }
+            return result;
         }
 
 
         public bool MarkAsPaid(int subscriptionId) 
         {
+            bool result = false;
             var subscription = Subscriptions.FirstOrDefault(s => s.Id == subscriptionId);
 
             if (subscription != null && subscription.SubscriptionStatus == SubscriptionStatus.Unpaid)
             {
                 subscription.SubscriptionStatus = SubscriptionStatus.Paid;
-                return true;
+                result = true;
             }
 
-            return false;
+            return result;
         }
     }
 }
