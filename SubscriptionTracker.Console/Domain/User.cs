@@ -25,11 +25,6 @@ namespace SubscriptionTracker.ConsoleApp.Domain
             return Subscriptions.Any(s => s.SubscriptionType.Name == subscriptionTypeName);
         }
 
-        public List<Subscription> ViewSubscriptions()
-        {
-            return Subscriptions;
-        }
-
         public bool AddSubscription(Subscription subscription) 
         {
             bool result = false;
