@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using SubscriptionTracker.ConsoleApp.Domain;
+﻿using SubscriptionTracker.ConsoleApp.Domain;
 
 namespace SubscriptionTracker.ConsoleApp
 {
@@ -12,7 +11,7 @@ namespace SubscriptionTracker.ConsoleApp
         public static void InitializeApp()
         {
             User = new User(1, "Timi");
-            do 
+            do
             {
                 ShowMainMenu();
             } while (IsRunning);
@@ -20,7 +19,7 @@ namespace SubscriptionTracker.ConsoleApp
 
         public static void ShowMainMenu()
         {
-            
+
             Console.Clear();
             Console.WriteLine($"Welcome {User.Name}!\n");
 
@@ -48,10 +47,10 @@ namespace SubscriptionTracker.ConsoleApp
                     HandleDeleteSubscription();
                     break;
                 case "4":
-                    //HandleMarkSubscriptionAsPaid();
+                    HandleMarkSubscriptionAsPaid();
                     break;
                 case "5":
-                    //HandleViewTotalMonthlyCost();
+                    HandleViewTotalMonthlyCost();
                     break;
                 case "0":
                     Console.WriteLine("Application shutting down...\nPress any key to quit.");
@@ -64,7 +63,7 @@ namespace SubscriptionTracker.ConsoleApp
             }
         }
 
-        private static void HandleViewSubscriptions() 
+        private static void HandleViewSubscriptions()
         {
             var userSubscriptions = User.Subscriptions;
 
@@ -84,7 +83,7 @@ namespace SubscriptionTracker.ConsoleApp
             Console.ReadKey();
         }
 
-        private static void HandleAddSubscription() 
+        private static void HandleAddSubscription()
         {
             Console.WriteLine("Enter the Subscription Name: ");
             string subscriptionTypeName = Console.ReadLine();
@@ -96,7 +95,7 @@ namespace SubscriptionTracker.ConsoleApp
             decimal subscriptionPrice = Convert.ToDecimal(Console.ReadLine());
 
             int subscriptionId;
-            int subscriptionTypeId; 
+            int subscriptionTypeId;
 
             if (User.Subscriptions.Any())
             {
@@ -117,19 +116,19 @@ namespace SubscriptionTracker.ConsoleApp
             {
                 Console.WriteLine($"Subscription {subscriptionTypeName} was added successfully!");
             }
-            else 
+            else
             {
                 Console.WriteLine($"Subscription {subscriptionTypeName} already exists! Please add another subscription!");
             }
             Console.ReadKey();
         }
 
-        private static void HandleDeleteSubscription() 
+        private static void HandleDeleteSubscription()
         {
-            Console.WriteLine("Please select the ID of the Subscription you want to remove: ");
+            Console.WriteLine("Please enter the ID of the Subscription you want to remove: ");
             int subscriptionId = Convert.ToInt32(Console.ReadLine());
 
-            if (User.Subscriptions.Any(s => s.Id == subscriptionId)) 
+            if (User.Subscriptions.Any(s => s.Id == subscriptionId))
             {
                 Console.WriteLine($"Are you sure you want to delete the subscription with the {subscriptionId}?\nY/N");
                 string? userInput = Console.ReadLine();
@@ -152,6 +151,39 @@ namespace SubscriptionTracker.ConsoleApp
             {
                 Console.WriteLine($"Delete could not happen because you currently have no subscriptions with the ID - {subscriptionId}! ");
             }
+            Console.ReadKey();
+        }
+
+        private static void HandleMarkSubscriptionAsPaid()
+        {
+            Console.WriteLine("Please enter the ID of the Subscription you want to mark as paid: ");
+            int subscriptionId = Convert.ToInt32(Console.ReadLine());
+
+            if (User.MarkAsPaid(subscriptionId))
+            {
+                Console.WriteLine($"Subscription with the ID - {subscriptionId} was marked as paid!");
+            }
+            else
+            {
+                Console.WriteLine($"Mark as paid operation could not happen because you currently have no subscriptions with the ID - {subscriptionId} or the subscription is already marked as paid! ");
+            }
+
+            Console.ReadKey();
+        }
+
+        private static void HandleViewTotalMonthlyCost()
+        {
+            decimal totalCost = User.CalculateTotalMonthlyCost();
+
+            if (User.Subscriptions.Any())
+            {
+                Console.WriteLine($"Your total monthly cost for all of the subscriptions is: {totalCost} RON.");
+            }
+            else
+            {
+                Console.WriteLine("You have no subscriptions to calculate!");
+            }
+
             Console.ReadKey();
         }
     }
