@@ -1,4 +1,5 @@
 ﻿using SubscriptionTracker.ConsoleApp.Domain;
+using SubscriptionTracker.ConsoleApp.Domain.SubscriptionManagement;
 
 namespace SubscriptionTracker.ConsoleApp
 {
@@ -88,6 +89,9 @@ namespace SubscriptionTracker.ConsoleApp
             Console.WriteLine("Enter the Subscription Name: ");
             string subscriptionTypeName = Console.ReadLine();
 
+            Console.WriteLine("Enter the plan type of your Subscription (Monthly/Yearly): ");
+            string subscriptionPlan = Console.ReadLine();
+
             Console.WriteLine("Enter the due date of the Subscription: ");
             DateTime dueDate = DateTime.Parse(Console.ReadLine()).Date;
 
@@ -96,6 +100,7 @@ namespace SubscriptionTracker.ConsoleApp
 
             int subscriptionId;
             int subscriptionTypeId;
+            Subscription subscription = null;
 
             if (User.Subscriptions.Any())
             {
@@ -110,15 +115,29 @@ namespace SubscriptionTracker.ConsoleApp
                 subscriptionTypeId = 1;
             }
 
-            Subscription subscription = new Subscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice));
-
-            if (User.AddSubscription(subscription))
+            switch (subscriptionPlan) 
             {
-                Console.WriteLine($"Subscription {subscriptionTypeName} was added successfully!");
+                case "Monthly":
+                    subscription = new MonthlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice), subscriptionPlan);
+                    break;
+                case "Yearly":
+                    subscription = new YearlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice), subscriptionPlan);
+                    break;
+                default:
+                    Console.WriteLine("Invalid subscription plan! Please add a subscription again!");
+                    break;
             }
-            else
+
+            if (subscription != null)
             {
-                Console.WriteLine($"Subscription {subscriptionTypeName} already exists! Please add another subscription!");
+                if (User.AddSubscription(subscription))
+                {
+                    Console.WriteLine($"Subscription {subscriptionTypeName} was added successfully!");
+                }
+                else
+                {
+                    Console.WriteLine($"Subscription {subscriptionTypeName} already exists! Please add another subscription!");
+                }
             }
             Console.ReadKey();
         }
@@ -173,7 +192,7 @@ namespace SubscriptionTracker.ConsoleApp
 
         private static void HandleViewTotalMonthlyCost()
         {
-            decimal totalCost = User.CalculateTotalMonthlyCost();
+            decimal totalCost = User.CalculateTotalCost();
 
             if (User.Subscriptions.Any())
             {

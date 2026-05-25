@@ -1,4 +1,5 @@
 ﻿using SubscriptionTracker.ConsoleApp.Domain.Enums;
+using SubscriptionTracker.ConsoleApp.Domain.SubscriptionManagement;
 
 namespace SubscriptionTracker.ConsoleApp.Domain
 {
@@ -15,9 +16,9 @@ namespace SubscriptionTracker.ConsoleApp.Domain
         public string Name { get; set; }
         public List<Subscription> Subscriptions { get; set; }
 
-        public decimal CalculateTotalMonthlyCost() 
+        public decimal CalculateTotalCost() 
         {
-            return Subscriptions.Sum(s => s.Price.SubscriptionPrice);
+            return Subscriptions.Sum(s => s.CalculateCost());
         }
 
         public bool CheckDuplicateSubscriptions(string subscriptionTypeName) 
