@@ -2,9 +2,12 @@
 {
     public class MonthlySubscription : Subscription
     {
-        public MonthlySubscription(int id, SubscriptionType subscriptionType, DateTime dueDate, Price price, string subscriptionPlan) : base(id, subscriptionType, dueDate, price, subscriptionPlan)
+        public MonthlySubscription(int id, SubscriptionType subscriptionType, DateTime dueDate, Price price) : base(id, subscriptionType, dueDate, price)
         {
         }
+
+        public override string PlanName => "Monthly";
+
         public override decimal CalculateCost()
         {
             return Price.SubscriptionPrice;

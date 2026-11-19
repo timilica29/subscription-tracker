@@ -86,21 +86,17 @@ namespace SubscriptionTracker.ConsoleApp
 
         private static void HandleAddSubscription()
         {
-            Console.WriteLine("Enter the Subscription Name: ");
-            string subscriptionTypeName = Console.ReadLine();
+            string subscriptionTypeName = ReadRequiredText("Enter the Subscription Name: ");
 
-            Console.WriteLine("Enter the plan type of your Subscription (Monthly/Yearly): ");
-            string subscriptionPlan = Console.ReadLine();
+            string subscriptionPlan = ReadRequiredText("Enter the plan type of your Subscription (Monthly/Yearly): ");
 
-            Console.WriteLine("Enter the due date of the Subscription: ");
-            DateTime dueDate = DateTime.Parse(Console.ReadLine()).Date;
+            DateTime dueDate = ReadDate("Enter the due date of the Subscription: ");
 
-            Console.WriteLine("Enter the Price of the Subscription: ");
-            decimal subscriptionPrice = Convert.ToDecimal(Console.ReadLine());
+            decimal subscriptionPrice = ReadPositiveDecimal("Enter the Price of the Subscription: ");
 
             int subscriptionId;
             int subscriptionTypeId;
-            Subscription subscription = null;
+            Subscription? subscription = null;
 
             if (User.Subscriptions.Any())
             {
@@ -118,10 +114,10 @@ namespace SubscriptionTracker.ConsoleApp
             switch (subscriptionPlan) 
             {
                 case "Monthly":
-                    subscription = new MonthlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice), subscriptionPlan);
+                    subscription = new MonthlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice));
                     break;
                 case "Yearly":
-                    subscription = new YearlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice), subscriptionPlan);
+                    subscription = new YearlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice));
                     break;
                 default:
                     Console.WriteLine("Invalid subscription plan! Please add a subscription again!");
@@ -144,8 +140,7 @@ namespace SubscriptionTracker.ConsoleApp
 
         private static void HandleDeleteSubscription()
         {
-            Console.WriteLine("Please enter the ID of the Subscription you want to remove: ");
-            int subscriptionId = Convert.ToInt32(Console.ReadLine());
+            int subscriptionId = ReadInt("Please enter the ID of the Subscription you want to remove: ");
 
             if (User.Subscriptions.Any(s => s.Id == subscriptionId))
             {
@@ -175,8 +170,7 @@ namespace SubscriptionTracker.ConsoleApp
 
         private static void HandleMarkSubscriptionAsPaid()
         {
-            Console.WriteLine("Please enter the ID of the Subscription you want to mark as paid: ");
-            int subscriptionId = Convert.ToInt32(Console.ReadLine());
+            int subscriptionId = ReadInt("Please enter the ID of the Subscription you want to mark as paid: ");
 
             if (User.MarkAsPaid(subscriptionId))
             {
@@ -196,7 +190,7 @@ namespace SubscriptionTracker.ConsoleApp
 
             if (User.Subscriptions.Any())
             {
-                Console.WriteLine($"Your total monthly cost for all of the subscriptions is: {totalCost} RON.");
+                Console.WriteLine($"Your total monthly cost for all of the subscriptions is: {totalCost:F2} RON.");
             }
             else
             {
@@ -204,6 +198,70 @@ namespace SubscriptionTracker.ConsoleApp
             }
 
             Console.ReadKey();
+        }
+
+        private static string ReadRequiredText(string prompt)
+        {
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                string? input = Console.ReadLine();
+
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    return input.Trim();
+                }
+
+                Console.WriteLine("This field cannot be empty. Please try again.");
+            }
+        }
+
+        private static DateTime ReadDate(string prompt)
+        {
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                string? input = Console.ReadLine();
+
+                if (DateTime.TryParse(input, out DateTime date))
+                {
+                    return date.Date;
+                }
+
+                Console.WriteLine($"'{input}' is not a valid date. Please use a format like {DateTime.Today:d}.");
+            }
+        }
+
+        private static decimal ReadPositiveDecimal(string prompt)
+        {
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                string? input = Console.ReadLine();
+
+                if (decimal.TryParse(input, out decimal value) && value > 0)
+                {
+                    return value;
+                }
+
+                Console.WriteLine($"'{input}' is not a valid price. Please enter a number greater than 0.");
+            }
+        }
+
+        private static int ReadInt(string prompt)
+        {
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                string? input = Console.ReadLine();
+
+                if (int.TryParse(input, out int value))
+                {
+                    return value;
+                }
+
+                Console.WriteLine($"'{input}' is not a valid ID. Please enter a whole number.");
+            }
         }
     }
 }
