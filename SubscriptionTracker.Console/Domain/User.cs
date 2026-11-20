@@ -23,7 +23,7 @@ namespace SubscriptionTracker.ConsoleApp.Domain
 
         public bool CheckDuplicateSubscriptions(string subscriptionTypeName) 
         {
-            return Subscriptions.Any(s => s.SubscriptionType.Name == subscriptionTypeName);
+            return Subscriptions.Any(s => s.SubscriptionType.Name.Equals(subscriptionTypeName, StringComparison.OrdinalIgnoreCase));
         }
 
         public bool AddSubscription(Subscription subscription) 

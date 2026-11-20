@@ -5,7 +5,7 @@
         public SubscriptionType(int id, string name) 
         {
             Id = id;
-            Name = name;
+            Name = name.Trim();
         }
 
         public int Id { get; set; }
