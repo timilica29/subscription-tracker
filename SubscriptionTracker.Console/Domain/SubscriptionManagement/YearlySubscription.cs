@@ -2,11 +2,12 @@
 {
     public class YearlySubscription : Subscription
     {
-        public YearlySubscription(int id, SubscriptionType subscriptionType, DateTime dueDate, Price price) : base(id, subscriptionType, dueDate, price)
+        public YearlySubscription(int id, SubscriptionType subscriptionType, DateOnly startDate, Price price) : base(id, subscriptionType, startDate, price)
         {
         }
 
         public override string PlanName => "Yearly";
+        public override int BillingPeriodInMonths => 12;
 
         public override decimal CalculateCost()
         {

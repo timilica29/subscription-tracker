@@ -90,7 +90,7 @@ namespace SubscriptionTracker.ConsoleApp
 
             string subscriptionPlan = ReadRequiredText("Enter the plan type of your Subscription (Monthly/Yearly): ");
 
-            DateTime dueDate = ReadDate("Enter the due date of the Subscription: ");
+            DateOnly startDate = ReadDate("Enter the start date of the Subscription (first payment): ");
 
             decimal subscriptionPrice = ReadPositiveDecimal("Enter the Price of the Subscription: ");
 
@@ -114,10 +114,10 @@ namespace SubscriptionTracker.ConsoleApp
             switch (subscriptionPlan) 
             {
                 case "Monthly":
-                    subscription = new MonthlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice));
+                    subscription = new MonthlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), startDate, new Price(subscriptionPrice));
                     break;
                 case "Yearly":
-                    subscription = new YearlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), dueDate, new Price(subscriptionPrice));
+                    subscription = new YearlySubscription(subscriptionId, new SubscriptionType(subscriptionTypeId, subscriptionTypeName), startDate, new Price(subscriptionPrice));
                     break;
                 default:
                     Console.WriteLine("Invalid subscription plan! Please add a subscription again!");
@@ -216,19 +216,19 @@ namespace SubscriptionTracker.ConsoleApp
             }
         }
 
-        private static DateTime ReadDate(string prompt)
+        private static DateOnly ReadDate(string prompt)
         {
             while (true)
             {
                 Console.WriteLine(prompt);
                 string? input = Console.ReadLine();
 
-                if (DateTime.TryParse(input, out DateTime date))
+                if (DateOnly.TryParse(input, out DateOnly date))
                 {
-                    return date.Date;
+                    return date;
                 }
 
-                Console.WriteLine($"'{input}' is not a valid date. Please use a format like {DateTime.Today:d}.");
+                Console.WriteLine($"'{input}' is not a valid date. Please use a format like {DateOnly.FromDateTime(DateTime.Today)}.");
             }
         }
 
